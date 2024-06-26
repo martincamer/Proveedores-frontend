@@ -1,7 +1,7 @@
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useRemuneracionContext } from "../../context/RemuneracionesProvider";
+import { useRemuneracionContext } from "../../context/ProveedoresContext";
 import client from "../../api/axios";
 import io from "socket.io-client";
 import { IoIosAlert } from "react-icons/io";

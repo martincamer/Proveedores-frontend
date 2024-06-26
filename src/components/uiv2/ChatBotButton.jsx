@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 const ChatBotButton = () => {
   // Número de teléfono para la acción de chat
-  const phoneNumber = "3462693961";
+  const phoneNumber = "3462415609";
 
   // Función para abrir el chat con el número de teléfono
   const handleChatClick = useCallback(() => {
@@ -16,7 +16,7 @@ const ChatBotButton = () => {
       className="fixed bottom-8 right-8 z-50 max-md:hidden" // Posición fija, en la parte inferior derecha
     >
       <button
-        className="flex items-center justify-center p-4 bg-green-500 font-semibold rounded-full text-white hover:bg-indigo-500 transition-all shadow-lg"
+        className="flex items-center justify-center p-4 bg-green-500 font-semibold rounded-full text-white hover:bg-blue-500 transition-all shadow-lg"
         onClick={handleChatClick}
         aria-label="Chatear"
       >

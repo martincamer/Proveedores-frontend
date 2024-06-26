@@ -6,7 +6,7 @@ import { ModalCrearChoferes } from "../../components/Modales/ModalCrearChoferes"
 import { ModalVerChoferes } from "../../components/Modales/ModalVerChoferes";
 import { ModalCrearClienteRemuneracion } from "../../components/Modales/ModalCrearClienteRemuneracion";
 import { ModalEditarClienteRemuneracion } from "../../components/Modales/ModalEditarClienteRemuneracion";
-import { useRemuneracionContext } from "../../context/RemuneracionesProvider";
+import { useRemuneracionContext } from "../../context/ProveedoresContext";
 import client from "../../api/axios";
 import io from "socket.io-client";
 

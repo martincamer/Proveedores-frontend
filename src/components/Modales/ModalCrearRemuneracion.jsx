@@ -5,7 +5,7 @@ import { ModalCrearChoferes } from "../../components/Modales/ModalCrearChoferes"
 import { ModalVerChoferes } from "../../components/Modales/ModalVerChoferes";
 import { ModalCrearClienteRemuneracion } from "../../components/Modales/ModalCrearClienteRemuneracion";
 import { crearNuevaRemuneracion } from "../../api/ingresos";
-import { useRemuneracionContext } from "../../context/RemuneracionesProvider";
+import { useRemuneracionContext } from "../../context/ProveedoresContext";
 import { ModalEditarClienteRemuneracion } from "../../components/Modales/ModalEditarClienteRemuneracion";
 import { useSalidasContext } from "../../context/SalidasProvider";
 import { toast } from "react-toastify";

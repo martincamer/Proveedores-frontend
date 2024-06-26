@@ -47,7 +47,7 @@ export const Login = () => {
       <div className="w-full z-[103]">
         <form
           onSubmit={onSubmit}
-          className="flex w-1/3 mx-auto flex-col gap-4 bg-white px-10 py-12 rounded-2xl  shadow-xl max-md:w-full max-md:px-5 max-md:py-10 max-md:gap-3 z-[103]"
+          className="flex w-1/3 mx-auto flex-col gap-4 bg-white px-10 py-12  shadow-xl max-md:w-full max-md:px-5 max-md:py-10 max-md:gap-3 z-[103]"
         >
           <div className="flex justify-center">
             <h4 className="font-semibold text-2xl text-orange-500 max-md:text-xl">
@@ -55,7 +55,7 @@ export const Login = () => {
             </h4>
           </div>
           <div className="text-base font-medium text-slate-500 text-center max-md:text-sm">
-            Ingresa al sistema de logistica de{" "}
+            Ingresa al sistema de Proveedores de{" "}
             <span className="font-bold text-slate-600">Tecnohouse</span>.
           </div>
           {
@@ -73,18 +73,18 @@ export const Login = () => {
             </div>
           }
           <div className="flex flex-col gap-2">
-            <Label label="Email del registro" />
+            <Label label="Usuario" />
             <Input
               register={register}
-              placeholder={"emailregistro@email.com"}
-              type={"email"}
+              placeholder={"martin011"}
+              type={"text"}
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label label="Contraseña del registro" />
+            <Label label="Contraseña" />
             <InputPassword
               register={register}
-              placeholder={""}
+              placeholder={"123456"}
               type={"password"}
             />
           </div>

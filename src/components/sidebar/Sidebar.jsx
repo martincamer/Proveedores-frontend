@@ -2,17 +2,8 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
 import { Link, useLocation } from "react-router-dom";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
-import {
-  CiAlignBottom,
-  CiBag1,
-  CiHome,
-  CiMemoPad,
-  CiMoneyBill,
-  CiSettings,
-  CiViewList,
-} from "react-icons/ci";
-import { FaDatabase, FaTruckMoving, FaWallet } from "react-icons/fa6";
-import { FaFileAlt, FaMoneyBillWaveAlt, FaThList } from "react-icons/fa";
+import { CiSettings } from "react-icons/ci";
+import { FaBuildingUser, FaDatabase } from "react-icons/fa6";
 
 export const SideBar = () => {
   const { user } = useAuth();
@@ -57,57 +48,13 @@ export const SideBar = () => {
           </Link>
 
           <Link
-            to={"/salidas"}
+            to={"/proveedores"}
             className={`${
-              location.pathname === "/salidas" ? "bg-gray-100" : "bg-none"
+              location.pathname === "/proveedores" ? "bg-gray-100" : "bg-none"
             } hover:text-blue-500 text-blue-500 text-sm transition-all py-3 px-3`}
           >
-            Crear nuevas salidas/ver/editar
+            Proveedores, crear nuevos, editar, etc.
           </Link>
-          <Link
-            to={"/remuneraciones"}
-            className={`${
-              location.pathname === "/remuneraciones"
-                ? "bg-gray-100"
-                : "bg-none"
-            } hover:text-blue-500 text-blue-500 text-sm transition-all py-3 px-3`}
-          >
-            Crear nuevas remuneraciones/ver/editar
-          </Link>
-          <Link
-            to={"/legales"}
-            className={`${
-              location.pathname === "/legales" ? "bg-gray-100" : "bg-none"
-            } hover:text-blue-500 text-blue-500 text-sm transition-all py-3 px-3`}
-          >
-            Crear nuevas ordenes legales/ver/editar
-          </Link>
-          <Link
-            to={"/rendiciones"}
-            className={`${
-              location.pathname === "/rendiciones" ? "bg-gray-100" : "bg-none"
-            } hover:text-blue-500 text-blue-500 text-sm transition-all py-3 px-3`}
-          >
-            Crear nuevas rendiciones/editar/ver
-          </Link>
-          <Link
-            to={"/estadistica"}
-            className={`${
-              location.pathname === "/estadistica" ? "bg-gray-100" : "bg-none"
-            } hover:text-blue-500 text-blue-500 text-sm transition-all py-3 px-3`}
-          >
-            Filtrar estadisticas del mes
-          </Link>
-          {user.localidad === "admin" && (
-            <Link
-              to={"/cuentas"}
-              className={`${
-                location.pathname === "/cuentas" ? "bg-gray-100" : "bg-none"
-              } hover:text-blue-500 text-blue-500 text-sm transition-all py-3 px-3`}
-            >
-              Crear cuentas/editar/administrar
-            </Link>
-          )}
         </div>
       ) : (
         <div className="flex flex-col justify-center">
@@ -130,90 +77,20 @@ export const SideBar = () => {
 
           <div
             className={`${
-              location.pathname === "/salidas" ? "bg-gray-100" : "bg-none"
+              location.pathname === "/proveedores" ? "bg-gray-100" : "bg-none"
             } w-full text-center py-2 items-center transition-all`}
           >
             <div className="w-full text-center py-2 items-center transition-all ">
               <div
                 className="tooltip tooltip-right font-bold"
-                data-tip="SALIDAS/CREAR/EDITAR"
+                data-tip="PROVEEDORES"
               >
-                <Link to={"/salidas"}>
-                  <FaTruckMoving className="text-3xl text-blue-600" />
+                <Link to={"/proveedores"}>
+                  <FaBuildingUser className="text-4xl text-blue-600" />
                 </Link>
               </div>
             </div>
           </div>
-
-          <div
-            className={`${
-              location.pathname === "/remuneraciones"
-                ? "bg-gray-100"
-                : "bg-none"
-            } w-full text-center py-2 items-center transition-all`}
-          >
-            <div className="w-full text-center py-2 items-center transition-all ">
-              <div
-                className="tooltip tooltip-right font-bold"
-                data-tip="CREAR REMUNERACIONES/VER/EDITAR"
-              >
-                <Link to={"/remuneraciones"}>
-                  <FaMoneyBillWaveAlt className="text-3xl text-blue-600" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={`${
-              location.pathname === "/legales" ? "bg-gray-100" : "bg-none"
-            } w-full text-center py-2 items-center transition-all`}
-          >
-            <div className="w-full text-center py-2 items-center transition-all ">
-              <div
-                className="tooltip tooltip-right font-bold"
-                data-tip="CREAR NUEVAS ORDENES LEGALES/EDITAR/VER"
-              >
-                <Link to={"/legales"}>
-                  <FaFileAlt className="text-3xl text-blue-600" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={`${
-              location.pathname === "/rendiciones" ? "bg-gray-100" : "bg-none"
-            } w-full text-center py-2 items-center transition-all`}
-          >
-            <div className="w-full text-center py-2 items-center transition-all ">
-              <div
-                className="tooltip tooltip-right font-bold"
-                data-tip="CREAR NUEVAS RENDICIONES EDITAR/VER"
-              >
-                <Link to={"/rendiciones"}>
-                  <FaWallet className="text-3xl text-blue-600" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* <div
-            className={`${
-              location.pathname === "/estadistica" ? "bg-gray-100" : "bg-none"
-            } w-full text-center py-2 items-center transition-all`}
-          >
-            <div className="w-full text-center py-2 items-center transition-all ">
-              <div
-                className="tooltip tooltip-right font-bold"
-                data-tip="FILTRAR ESTADISTICAS MESES"
-              >
-                <Link to={"/estadistica"}>
-                  <FaThList className="text-3xl text-blue-600" />
-                </Link>
-              </div>
-            </div>
-          </div> */}
 
           {user.localidad === "admin" && (
             <div

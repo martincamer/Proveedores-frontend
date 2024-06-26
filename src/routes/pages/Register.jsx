@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthProvider";
 import { Label } from "../../components/formularios/Label";
@@ -22,14 +22,13 @@ export const Register = () => {
   });
 
   return (
-    <section className="flex items-center justify-center gap-12 h-screen  bg-white flex-col relative">
-      {/* <div className="h-[300px] rounded-full absolute top-10 left-[300px] w-[300px] bg-indigo-700 shadow-lg"></div> */}
+    <section className="flex items-center justify-center gap-12 h-screen  bg-gray-100 flex-col relative">
       <form
         onSubmit={onSubmit}
-        className="flex w-1/3 flex-col gap-4 bg-white border-[1px] border-slate-300 px-10 py-10 rounded-xl  shadow"
+        className="flex w-1/3 flex-col gap-4 bg-white border-[1px] border-slate-300 px-10 py-10  shadow"
       >
-        <div className="text-lg text-slate-700 w-full text-center">
-          Registro de usuario
+        <div className="text-lg font-bold text-slate-700 w-full text-center">
+          Registro nuevo usuario
         </div>
         {
           <div>
@@ -45,6 +44,7 @@ export const Register = () => {
             </div>
           </div>
         }
+
         <div className="flex flex-col gap-2">
           <Label label="Email del registro" />
           <Input
