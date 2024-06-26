@@ -190,7 +190,7 @@ export const Proveedores = () => {
                     <div
                       tabIndex={0}
                       role="button"
-                      className="bg-blue-500 py-2 px-2 rounded-full text-white m-1"
+                      className="bg-blues-500 py-2 px-2 rounded-full text-white m-1"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
