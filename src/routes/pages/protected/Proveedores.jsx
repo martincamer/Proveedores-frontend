@@ -170,7 +170,17 @@ export const Proveedores = () => {
                   {s.provincia_proveedor}
                 </td>
                 <td className="px-4 py-3 font-bold text-gray-900 uppercase">
-                  {formatearDinero(Number(s.haber))}
+                  <div className="flex">
+                    <p
+                      className={`${
+                        Number(s.haber) <= 0
+                          ? "text-green-700 bg-green-50"
+                          : "text-red-700 bg-red-50"
+                      } py-2 px-3 rounded`}
+                    >
+                      {formatearDinero(Number(s.haber))}
+                    </p>
+                  </div>
                 </td>
                 <td className="px-4 py-3 font-bold text-gray-900 uppercase">
                   {formatearDinero(Number(s.deber))}

@@ -1,16 +1,15 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useProveedoresContext } from "../../../context/ProveedoresContext";
-import { FaAdversal, FaClipboard, FaSearch } from "react-icons/fa";
+import { FaClipboard } from "react-icons/fa";
 import { formatearDinero } from "../../../helpers/formatearDinero";
-import { useObtenerId } from "../../../helpers/useObtenerId";
-import client from "../../../api/axios";
 import { ModalNuevoComprobante } from "../../../components/proveedor/ModalNuevoComprobante";
 import { formatearFecha } from "../../../helpers/formatearFecha";
+import client from "../../../api/axios";
 
 export const Proveedor = () => {
-  const { proveedor, setProveedor } = useProveedoresContext();
+  const { proveedor, setProveedor, setProveedores } = useProveedoresContext();
   const params = useParams();
 
   useEffect(() => {
@@ -43,6 +42,37 @@ export const Proveedor = () => {
     setSelectedImage(null);
   };
 
+  const handleEliminar = async (idComprobante) => {
+    const res = await client.delete(
+      `/proveedores/${params.id}/comprobantes/${idComprobante}`
+    );
+
+    setProveedores(res.data.todosLosProveedores);
+    setProveedor(res.data.proveedorActualizado);
+
+    toast.error("¡Comprobante eliminado correctamente!", {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      style: {
+        padding: "12px",
+      },
+    });
+  };
+
+  const totalSumado = comprobantes.reduce((accumulator, current) => {
+    // Convertir el total de string a número y sumarlo al acumulador
+    return accumulator + parseFloat(current.total);
+  }, 0); // El segundo argumento de reduce es el valor inicial del acumulador, en este caso 0
+
+  console.log(totalSumado); // Imprimirá 350000
+
+  console.log(comprobantes);
   return (
     <section className="min-h-screen max-h-full w-full h-full max-w-full">
       <ToastContainer />
@@ -74,13 +104,13 @@ export const Proveedor = () => {
             Saldo a favor/proveedor
           </p>
           <p className="text-orange-500 text-xl font-bold">
-            {formatearDinero(300000)}
+            {formatearDinero(Number(proveedor.deber))}
           </p>
         </div>
         <div className="bg-blue-50 py-5 px-8">
           <p className="text-blue-500 font-extrabold text-xl">Debemos</p>
           <p className="text-red-500 text-xl font-bold">
-            {formatearDinero(12000000)}
+            {formatearDinero(Number(proveedor.haber))}
           </p>
         </div>
         <div className="bg-blue-50 py-5 px-8">
@@ -88,7 +118,7 @@ export const Proveedor = () => {
             Cargado en comprobantes
           </p>
           <p className="text-green-500 text-xl font-bold text-center">
-            {formatearDinero(3000000)}
+            {formatearDinero(totalSumado)}
           </p>
         </div>
       </div>
@@ -191,16 +221,17 @@ export const Proveedor = () => {
                             Ver comprobante
                           </button>{" "}
                           <button
-                            onClick={() => {
-                              handleObtenerId(s.id);
-                              document
-                                .getElementById("my_modal_eliminar_proveedor")
-                                .showModal();
-                            }}
+                            // onClick={() => {
+                            //   handleObtenerId(s.id);
+                            //   document
+                            //     .getElementById("my_modal_eliminar_proveedor")
+                            //     .showModal();
+                            // }}
                             type="button"
+                            onClick={() => handleEliminar(s.id)}
                             className="bg-red-500 py-2 px-4 text-white font-semibold rounded hover:bg-red-700 transition-all"
                           >
-                            Eliminar el proveedor
+                            Eliminar el comprobante
                           </button>
                         </ul>
                       </div>
