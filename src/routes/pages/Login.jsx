@@ -77,7 +77,7 @@ export const Login = () => {
             <Input
               register={register}
               placeholder={"martin011"}
-              type={"text"}
+              type={"username"}
             />
           </div>
           <div className="flex flex-col gap-2">

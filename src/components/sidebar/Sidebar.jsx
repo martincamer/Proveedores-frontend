@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 import { CiSettings } from "react-icons/ci";
 import { FaBuildingUser, FaDatabase } from "react-icons/fa6";
+import { FaFile } from "react-icons/fa";
 
 export const SideBar = () => {
   const { user } = useAuth();
@@ -87,6 +88,23 @@ export const SideBar = () => {
               >
                 <Link to={"/proveedores"}>
                   <FaBuildingUser className="text-4xl text-blue-600" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className={`${
+              location.pathname === "/ordenes" ? "bg-gray-100" : "bg-none"
+            } w-full text-center py-2 items-center transition-all`}
+          >
+            <div className="w-full text-center py-2 items-center transition-all ">
+              <div
+                className="tooltip tooltip-right font-bold"
+                data-tip="Ordenes/Facturas/etc."
+              >
+                <Link to={"/ordenes"}>
+                  <FaFile className="text-3xl text-blue-600" />
                 </Link>
               </div>
             </div>

@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { ToastContainer } from "react-toastify";
-import { useProveedoresContext } from "../../../context/ProveedoresContext";
 import { FaSearch } from "react-icons/fa";
-import { ModalNuevoProveedor } from "../../../components/proveedor/ModalNuevoProveedor";
-import { ModalEliminarProveedor } from "../../../components/proveedor/ModalEliminarProveedor";
 import { useObtenerId } from "../../../helpers/useObtenerId";
-import { ModalActualizarProveedor } from "../../../components/proveedor/ModalActualizarProveedor";
 import { formatearDinero } from "../../../helpers/formatearDinero";
+import { ModalNuevaOrden } from "../../../components/ordenes/ModalNuevaOrden";
+import { useProveedoresContext } from "../../../context/ProveedoresContext";
+import { useState } from "react";
+import { ModalEliminarOrden } from "../../../components/ordenes/ModalEliminarOrden";
+import { formatearFecha } from "../../../helpers/formatearFecha";
 
-export const Proveedores = () => {
-  const { proveedores } = useProveedoresContext();
+export const Ordenes = () => {
+  const { ordenes } = useProveedoresContext();
 
   const [searchTermCliente, setSearchTermCliente] = useState("");
 
@@ -22,13 +22,28 @@ export const Proveedores = () => {
   const { handleObtenerId, idObtenida } = useObtenerId();
 
   // Filtrar por término de búsqueda y usuario seleccionado
-  let filteredData = proveedores.filter((proveedor) => {
-    const matchesSearchTerm = proveedor.proveedor
+  let filteredData = ordenes.filter((orden) => {
+    const matchesSearchTerm = orden.proveedor
       .toLowerCase()
       .includes(searchTermCliente.toLowerCase());
 
     return matchesSearchTerm;
   });
+
+  const [isModalVisible, setModalVisible] = useState(false); // Estado para la visibilidad del modal
+  const [selectedImage, setSelectedImage] = useState(null); // Estado para la imagen seleccionada
+
+  // Abre el modal y establece la imagen seleccionada
+  const handleViewImage = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setModalVisible(true);
+  };
+
+  // Cierra el modal
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedImage(null);
+  };
 
   return (
     <section className="min-h-screen max-h-full w-full h-full max-w-full">
@@ -42,28 +57,27 @@ export const Proveedores = () => {
           Inicio
         </Link>{" "}
         <Link
-          to={"/proveedores"}
+          to={"/ordenes"}
           className="bg-blue-500 flex h-full px-4 justify-center items-center font-bold text-white"
         >
-          Proveedores
+          Ordenes
         </Link>
       </div>
       <div className="mx-5 my-10 bg-white py-6 px-6">
         <p className="font-bold text-blue-500 text-xl">
-          Crea tus proveedores en esta sección y lleva el control de sus
-          cuentas.
+          Crea tus ordenes, remitos, facturas, lleva el control, etc.
         </p>
       </div>
 
       <div className="bg-white py-5 px-5 mx-5">
         <button
           onClick={() =>
-            document.getElementById("my_modal_nuevo_proveedor").showModal()
+            document.getElementById("my_modal_nueva_orden").showModal()
           }
           type="button"
           className="bg-blue-500 py-2 px-4 text-white font-semibold rounded hover:bg-orange-500 transition-all"
         >
-          Crear nuevo proveedor
+          Crear una nueva orden
         </button>
       </div>
 
@@ -87,21 +101,15 @@ export const Proveedores = () => {
             <tr>
               <th className="px-4 py-4  text-slate-800 font-bold uppercase">
                 Referencia
-              </th>{" "}
+              </th>
               <th className="px-4 py-4  text-slate-800 font-bold uppercase">
                 Proveedor
               </th>{" "}
               <th className="px-4 py-4  text-slate-800 font-bold uppercase">
-                Localidad
+                Fecha de creación
               </th>{" "}
               <th className="px-4 py-4  text-slate-800 font-bold uppercase">
-                Provincia
-              </th>{" "}
-              <th className="px-4 py-4  text-slate-800 font-bold uppercase">
-                Deuda
-              </th>{" "}
-              <th className="px-4 py-4  text-slate-800 font-bold uppercase">
-                A favor
+                Total
               </th>
               <th className="px-1 py-4  text-slate-800 font-bold uppercase">
                 Acciones
@@ -110,35 +118,23 @@ export const Proveedores = () => {
           </thead>
 
           <tbody className="divide-y divide-gray-200 uppercase">
-            {filteredData.map((s) => (
+            {ordenes.map((s) => (
               <tr key={s.id}>
                 <td className="px-4 py-3 font-medium text-gray-900 uppercase">
                   {s.id}
                 </td>
                 <td className="px-4 py-3 font-medium text-gray-900 uppercase">
                   {s.proveedor}
-                </td>{" "}
-                <td className="px-4 py-3 font-medium text-gray-900 uppercase">
-                  {s.localidad_proveedor}
                 </td>
                 <td className="px-4 py-3 font-medium text-gray-900 uppercase">
-                  {s.provincia_proveedor}
+                  {formatearFecha(s.created_at)}
                 </td>
-                <td className="px-4 py-3 font-bold text-gray-900 uppercase">
+                <td className="px-4 py-3 font-medium text-gray-900 uppercase">
                   <div className="flex">
-                    <p
-                      className={`${
-                        Number(s.haber) <= 0
-                          ? "text-green-700 bg-green-50"
-                          : "text-red-700 bg-red-50"
-                      } py-2 px-3 rounded`}
-                    >
-                      {formatearDinero(Number(s.haber))}
+                    <p className="font-bold text-blue-500 bg-blue-50 py-1 px-3 rounded">
+                      {formatearDinero(Number(s.total))}
                     </p>
                   </div>
-                </td>
-                <td className="px-4 py-3 font-bold text-gray-900 uppercase">
-                  {formatearDinero(Number(s.deber))}
                 </td>
                 <td className="px-1 py-3 font-medium text-gray-900 uppercase cursor-pointer">
                   <div className="dropdown dropdown-left">
@@ -170,31 +166,32 @@ export const Proveedores = () => {
                         onClick={() => {
                           handleObtenerId(s.id),
                             document
-                              .getElementById("my_modal_editar_proveedor")
+                              .getElementById("my_modal_editar_orden")
                               .showModal();
                         }}
                         type="button"
                         className="bg-blue-500 py-2 px-4 text-white font-semibold rounded hover:bg-orange-500 transition-all"
                       >
-                        Editar el proveedor
+                        Editar la orden
                       </button>
-                      <Link
-                        to={`/proveedor/${s.id}`}
-                        className="bg-blue-500 py-2 px-4 text-white font-semibold rounded hover:bg-orange-500 transition-all capitalize text-center"
+                      <button
+                        onClick={() => handleViewImage(s.comprobante)} // Abre el modal con la imagen
+                        type="button"
+                        className="bg-green-500 py-2 px-4 text-white font-semibold rounded hover:bg-green-600 transition-all"
                       >
-                        Cargar comprobantes,pagos,etc.
-                      </Link>
+                        Ver comprobante
+                      </button>
                       <button
                         onClick={() => {
                           handleObtenerId(s.id),
                             document
-                              .getElementById("my_modal_eliminar_proveedor")
+                              .getElementById("my_modal_eliminar_orden")
                               .showModal();
                         }}
                         type="button"
-                        className="bg-red-500 py-2 px-4 text-white font-semibold rounded hover:bg-red-700 transition-all"
+                        className="bg-red-500 py-2 px-4 text-white font-semibold rounded hover:bg-red-800 transition-all"
                       >
-                        Eliminar el proveedor
+                        Eliminar la orden
                       </button>
                     </ul>
                   </div>
@@ -204,12 +201,51 @@ export const Proveedores = () => {
           </tbody>
         </table>
       </div>
-      <ModalNuevoProveedor />
-      <ModalEliminarProveedor
-        idObtenida={idObtenida}
-        message={"¿Estás seguro de eliminar el proveedor?"}
+      <ImageModal
+        isVisible={isModalVisible}
+        onClose={handleCloseModal} // Cierra el modal
+        imageUrl={selectedImage} // URL de la imagen seleccionada
       />
-      <ModalActualizarProveedor idObtenida={idObtenida} />
+      <ModalNuevaOrden />
+      <ModalEliminarOrden
+        idObtenida={idObtenida}
+        message={"¿Estas seguro de eliminar la orden?"}
+      />
     </section>
+  );
+};
+
+const ImageModal = ({ isVisible, onClose, imageUrl }) => {
+  if (!isVisible) return null; // Si el modal no está visible, no renderizar nada
+
+  const handleClickOutside = (event) => {
+    // Cierra el modal si haces clic fuera del contenido
+    onClose();
+  };
+
+  const handleContentClick = (event) => {
+    // Evitar la propagación del clic para no cerrar el modal cuando haces clic en el contenido
+    event.stopPropagation();
+  };
+
+  return (
+    <div
+      onClick={handleClickOutside} // Cierra el modal al hacer clic fuera
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    >
+      <div onClick={handleContentClick} className="relative p-5">
+        {imageUrl && imageUrl.toLowerCase().endsWith(".pdf") ? (
+          // Si la URL termina en ".pdf", mostrar el archivo PDF en un iframe
+          <iframe
+            src={imageUrl}
+            title="Archivo PDF"
+            className="w-[1220px] h-screen"
+          />
+        ) : (
+          // Si no, mostrar la imagen
+          <img src={imageUrl} alt="Comprobante" className="w-full h-auto" />
+        )}
+      </div>
+    </div>
   );
 };

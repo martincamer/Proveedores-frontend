@@ -11,6 +11,7 @@ import RutaProtegida from "./layouts/RutaProtejida";
 import "react-toastify/dist/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import { Proveedor } from "./routes/pages/protected/Proveedor";
+import { Ordenes } from "./routes/pages/protected/Ordenes";
 // import { NotFound } from "./routes/pages/protected/NotFound";
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
 
               <Route path="/proveedores" element={<Proveedores />} />
               <Route path="/proveedor/:id" element={<Proveedor />} />
+              <Route path="/ordenes" element={<Ordenes />} />
             </Route>
           </Route>
           {/* <Route path="*" element={<NotFound />} /> */}
