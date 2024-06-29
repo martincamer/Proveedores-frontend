@@ -14,6 +14,19 @@ export const Ordenes = () => {
 
   const [searchTermCliente, setSearchTermCliente] = useState("");
 
+  // Obtener el primer día del mes actual
+  const today = new Date();
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+  // Convertir las fechas en formato YYYY-MM-DD para los inputs tipo date
+  const fechaInicioPorDefecto = firstDayOfMonth.toISOString().split("T")[0];
+  const fechaFinPorDefecto = lastDayOfMonth.toISOString().split("T")[0];
+
+  // Estado inicial de las fechas con el rango del mes actual
+  const [fechaInicio, setFechaInicio] = useState(fechaInicioPorDefecto);
+  const [fechaFin, setFechaFin] = useState(fechaFinPorDefecto);
+
   const handleSearchClienteChange = (e) => {
     setSearchTermCliente(e.target.value);
   };
@@ -28,6 +41,31 @@ export const Ordenes = () => {
       .includes(searchTermCliente.toLowerCase());
 
     return matchesSearchTerm;
+  });
+
+  const handleFechaInicioChange = (e) => {
+    setFechaInicio(e.target.value);
+  };
+
+  const handleFechaFinChange = (e) => {
+    setFechaFin(e.target.value);
+  };
+
+  // Filtrar por rango de fechas
+  if (fechaInicio && fechaFin) {
+    const fechaInicioObj = new Date(fechaInicio);
+    const fechaFinObj = new Date(fechaFin);
+    filteredData = filteredData.filter((item) => {
+      const fechaOrden = new Date(item.created_at);
+      return fechaOrden >= fechaInicioObj && fechaOrden <= fechaFinObj;
+    });
+  }
+
+  // Ordenar por fecha de mayor a menor
+  filteredData.sort((a, b) => {
+    const fechaA = new Date(a.created_at);
+    const fechaB = new Date(b.created_at);
+    return fechaB - fechaA; // Ordena de mayor a menor (fecha más reciente primero)
   });
 
   const [isModalVisible, setModalVisible] = useState(false); // Estado para la visibilidad del modal
@@ -81,7 +119,7 @@ export const Ordenes = () => {
         </button>
       </div>
 
-      <div className="flex gap-2 items-center w-1/5 max-md:w-full max-md:flex-col my-5 mx-5">
+      <div className="flex gap-2 items-center w-1/3 max-md:w-full max-md:flex-col my-5 mx-5">
         <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
           <input
             value={searchTermCliente}
@@ -91,6 +129,27 @@ export const Ordenes = () => {
             placeholder="Buscar por nombre del proveedor"
           />
           <FaSearch className="text-blue-500" />
+        </div>
+
+        <div className="flex gap-2">
+          <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
+            <input
+              value={fechaInicio}
+              onChange={handleFechaInicioChange}
+              type="date"
+              className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
+              placeholder="Fecha de inicio"
+            />
+          </div>
+          <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
+            <input
+              value={fechaFin}
+              onChange={handleFechaFinChange}
+              type="date"
+              className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
+              placeholder="Fecha fin"
+            />
+          </div>
         </div>
       </div>
 
@@ -118,7 +177,7 @@ export const Ordenes = () => {
           </thead>
 
           <tbody className="divide-y divide-gray-200 uppercase">
-            {ordenes.map((s) => (
+            {filteredData.map((s) => (
               <tr key={s.id}>
                 <td className="px-4 py-3 font-medium text-gray-900 uppercase">
                   {s.id}
