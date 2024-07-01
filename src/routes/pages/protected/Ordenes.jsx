@@ -119,7 +119,7 @@ export const Ordenes = () => {
         </button>
       </div>
 
-      <div className="flex gap-2 items-center w-1/3 max-md:w-full max-md:flex-col my-5 mx-5">
+      <div className="flex gap-2 items-center w-[700px] max-md:w-full max-md:flex-col my-5 mx-5">
         <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
           <input
             value={searchTermCliente}

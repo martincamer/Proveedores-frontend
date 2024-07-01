@@ -8,6 +8,7 @@ import { ModalEliminarProveedor } from "../../../components/proveedor/ModalElimi
 import { useObtenerId } from "../../../helpers/useObtenerId";
 import { ModalActualizarProveedor } from "../../../components/proveedor/ModalActualizarProveedor";
 import { formatearDinero } from "../../../helpers/formatearDinero";
+import { ModalDeudasProveedores } from "../../../components/proveedor/ModalDeudasProveedores";
 
 export const Proveedores = () => {
   const { proveedores } = useProveedoresContext();
@@ -29,6 +30,13 @@ export const Proveedores = () => {
 
     return matchesSearchTerm;
   });
+
+  const totalDeudaProveedores = proveedores.reduce(
+    (total, orden) => total + parseFloat(orden.haber),
+    0
+  );
+
+  console.log(proveedores);
 
   return (
     <section className="min-h-screen max-h-full w-full h-full max-w-full">
@@ -67,7 +75,7 @@ export const Proveedores = () => {
         </button>
       </div>
 
-      <div className="flex gap-2 items-center w-1/5 max-md:w-full max-md:flex-col my-5 mx-5">
+      <div className="flex gap-2 items-center w-1/4 max-md:w-full max-md:flex-col my-5 mx-5">
         <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
           <input
             value={searchTermCliente}
@@ -78,6 +86,16 @@ export const Proveedores = () => {
           />
           <FaSearch className="text-blue-500" />
         </div>
+      </div>
+
+      <div className="mx-5">
+        {" "}
+        <button
+          onClick={() => document.getElementById("my_modal_deudas").showModal()}
+          className="bg-blue-500 py-1.5 px-5 text-white text-sm font-bold rounded hover:bg-rose-500"
+        >
+          Descargar resumen de los proveedores
+        </button>
       </div>
 
       {/* tabla de datos  */}
@@ -208,6 +226,10 @@ export const Proveedores = () => {
       <ModalEliminarProveedor
         idObtenida={idObtenida}
         message={"¿Estás seguro de eliminar el proveedor?"}
+      />
+      <ModalDeudasProveedores
+        totalDeudaProveedores={totalDeudaProveedores}
+        proveedores={proveedores}
       />
       <ModalActualizarProveedor idObtenida={idObtenida} />
     </section>

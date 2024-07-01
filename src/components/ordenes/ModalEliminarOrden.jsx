@@ -72,6 +72,9 @@ export const ModalEliminarOrden = ({ message, idObtenida }) => {
 
           <div className="mt-3 flex items-center justify-between gap-5">
             <button
+              onClick={() =>
+                document.getElementById("my_modal_eliminar_orden").close()
+              }
               className="text-sm font-bold text-gray-400 hover:bg-gray-300 py-2 px-4 rounded-full hover:text-gray-600"
               type="button"
             >

@@ -12,6 +12,28 @@ export const Proveedor = () => {
   const { proveedor, setProveedor, setProveedores } = useProveedoresContext();
   const params = useParams();
 
+  // Obtener el primer día del mes actual
+  const today = new Date();
+
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+  // Convertir las fechas en formato YYYY-MM-DD para los inputs tipo date
+  const fechaInicioPorDefecto = firstDayOfMonth.toISOString().split("T")[0];
+  const fechaFinPorDefecto = lastDayOfMonth.toISOString().split("T")[0];
+
+  // Estado inicial de las fechas con el rango del mes actual
+  const [fechaInicio, setFechaInicio] = useState(fechaInicioPorDefecto);
+  const [fechaFin, setFechaFin] = useState(fechaFinPorDefecto);
+
+  const handleFechaInicioChange = (e) => {
+    setFechaInicio(e.target.value);
+  };
+
+  const handleFechaFinChange = (e) => {
+    setFechaFin(e.target.value);
+  };
+
   useEffect(() => {
     const obtenerProveedor = async () => {
       const res = await client.get(`/proveedores/${params.id}`);
@@ -23,7 +45,7 @@ export const Proveedor = () => {
 
   console.log(proveedor);
 
-  const comprobantes = proveedor.comprobantes
+  let comprobantes = proveedor.comprobantes
     ? JSON.parse(proveedor.comprobantes)
     : [];
 
@@ -70,9 +92,23 @@ export const Proveedor = () => {
     return accumulator + parseFloat(current.total);
   }, 0); // El segundo argumento de reduce es el valor inicial del acumulador, en este caso 0
 
-  console.log(totalSumado); // Imprimirá 350000
+  // Filtrar por rango de fechas
+  if (fechaInicio && fechaFin) {
+    const fechaInicioObj = new Date(fechaInicio);
+    const fechaFinObj = new Date(fechaFin);
+    comprobantes = comprobantes.filter((item) => {
+      const fechaOrden = new Date(item.fecha);
+      return fechaOrden >= fechaInicioObj && fechaOrden <= fechaFinObj;
+    });
+  }
 
-  console.log(comprobantes);
+  // Ordenar por fecha de mayor a menor
+  const filtrarData = comprobantes.sort((a, b) => {
+    const fechaA = new Date(a.fecha);
+    const fechaB = new Date(b.fecha);
+    return fechaB - fechaA; // Ordena de mayor a menor (fecha más reciente primero)
+  });
+
   return (
     <section className="min-h-screen max-h-full w-full h-full max-w-full">
       <ToastContainer />
@@ -145,12 +181,34 @@ export const Proveedor = () => {
       </div>
 
       <div>
-        <div className="bg-white mx-5 mt-5 px-5 py-3">
+        <div className="bg-white mx-5 mt-5 px-5 py-3 flex gap-8">
           <p className="font-bold text-blue-500 flex gap-2 items-center">
             Comprobantes cargados al proveedor{" "}
             <FaClipboard className="text-2xl" />
           </p>
+          <div className="flex gap-2 items-center font-bold text-blue-500">
+            <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
+              <input
+                value={fechaInicio}
+                onChange={handleFechaInicioChange}
+                type="date"
+                className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
+                placeholder="Fecha de inicio"
+              />
+            </div>
+
+            <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
+              <input
+                value={fechaFin}
+                onChange={handleFechaFinChange}
+                type="date"
+                className="outline-none text-slate-600 w-full max-md:text-sm uppercase bg-white"
+                placeholder="Fecha fin"
+              />
+            </div>
+          </div>
         </div>
+
         <div className="bg-white mx-5 my-2 mb-20">
           <table className="table text-xs">
             <thead>
@@ -174,70 +232,68 @@ export const Proveedor = () => {
             </thead>
 
             <tbody className="divide-y divide-gray-200 uppercase">
-              {comprobantes
-                ?.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha de mayor a menor
-                .map((s) => (
-                  <tr key={s.id}>
-                    <td className="px-4 py-3 font-medium text-gray-900 uppercase">
-                      {s.id}
-                    </td>
-                    <td className="px-4 py-3 font-medium text-gray-900 uppercase">
-                      {formatearFecha(s.fecha)}
-                    </td>
-                    <td className="px-4 py-3 font-medium text-gray-900 uppercase">
-                      {s.proveedor}
-                    </td>
-                    <td className="px-4 py-3 text-blue-600 font-bold uppercase">
-                      {formatearDinero(Number(s.total))}
-                    </td>
-                    <td className="px-1 py-3 font-medium text-gray-900 uppercase cursor-pointer">
-                      <div className="dropdown dropdown-left">
-                        <div
-                          tabIndex={0}
-                          role="button"
-                          className="bg-blue-500 py-2 px-2 rounded-full text-white m-1"
+              {filtrarData.map((s) => (
+                <tr key={s.id}>
+                  <td className="px-4 py-3 font-medium text-gray-900 uppercase">
+                    {s.id}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-900 uppercase">
+                    {formatearFecha(s.fecha)}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-900 uppercase">
+                    {s.proveedor}
+                  </td>
+                  <td className="px-4 py-3 text-blue-600 font-bold uppercase">
+                    {formatearDinero(Number(s.total))}
+                  </td>
+                  <td className="px-1 py-3 font-medium text-gray-900 uppercase cursor-pointer">
+                    <div className="dropdown dropdown-left">
+                      <div
+                        tabIndex={0}
+                        role="button"
+                        className="bg-blue-500 py-2 px-2 rounded-full text-white m-1"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-5 h-5"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-5 h-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-                            />
-                          </svg>
-                        </div>
-                        <ul className="font-bold text-xs dropdown-content z-[1] menu p-2 shadow-md border-[1px] border-slate-200 bg-base-100 rounded-none w-72 gap-1">
-                          <button
-                            type="button"
-                            onClick={() => handleViewImage(s.comprobante)} // Abre el modal con la imagen
-                            className="bg-blue-500 py-2 px-4 text-white font-semibold rounded hover:bg-orange-500 transition-all"
-                          >
-                            Ver comprobante
-                          </button>{" "}
-                          <button
-                            // onClick={() => {
-                            //   handleObtenerId(s.id);
-                            //   document
-                            //     .getElementById("my_modal_eliminar_proveedor")
-                            //     .showModal();
-                            // }}
-                            type="button"
-                            onClick={() => handleEliminar(s.id)}
-                            className="bg-red-500 py-2 px-4 text-white font-semibold rounded hover:bg-red-700 transition-all"
-                          >
-                            Eliminar el comprobante
-                          </button>
-                        </ul>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                          />
+                        </svg>
                       </div>
-                    </td>
-                  </tr>
-                ))}
+                      <ul className="font-bold text-xs dropdown-content z-[1] menu p-2 shadow-md border-[1px] border-slate-200 bg-base-100 rounded-none w-72 gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleViewImage(s.comprobante)} // Abre el modal con la imagen
+                          className="bg-blue-500 py-2 px-4 text-white font-semibold rounded hover:bg-orange-500 transition-all"
+                        >
+                          Ver comprobante
+                        </button>{" "}
+                        <button
+                          // onClick={() => {
+                          //   handleObtenerId(s.id);
+                          //   document
+                          //     .getElementById("my_modal_eliminar_proveedor")
+                          //     .showModal();
+                          // }}
+                          type="button"
+                          onClick={() => handleEliminar(s.id)}
+                          className="bg-red-500 py-2 px-4 text-white font-semibold rounded hover:bg-red-700 transition-all"
+                        >
+                          Eliminar el comprobante
+                        </button>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
