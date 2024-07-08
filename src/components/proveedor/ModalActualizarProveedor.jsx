@@ -6,12 +6,15 @@ import { Button } from "../formularios/Button";
 import client from "../../api/axios";
 import io from "socket.io-client";
 import { toast } from "react-toastify";
+import { formatearDinero } from "../../helpers/formatearDinero";
 
 export const ModalActualizarProveedor = ({ idObtenida }) => {
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, watch } = useForm();
   const { setProveedores } = useProveedoresContext();
 
   const [socket, setSocket] = useState(null);
+
+  const haber = watch("haber");
 
   useEffect(() => {
     const obtenerProveedor = async () => {
@@ -20,8 +23,7 @@ export const ModalActualizarProveedor = ({ idObtenida }) => {
       setValue("proveedor", res.data.proveedor);
       setValue("localidad_proveedor", res.data.localidad_proveedor);
       setValue("provincia_proveedor", res.data.provincia_proveedor);
-
-      console.log("ress", res.data);
+      setValue("haber", res.data.haber);
     };
 
     obtenerProveedor();
@@ -75,6 +77,12 @@ export const ModalActualizarProveedor = ({ idObtenida }) => {
     }
   };
 
+  const [isEditable, setIsEditable] = useState(false);
+
+  const handleInputClick = () => {
+    setIsEditable(true);
+  };
+
   return (
     <dialog id="my_modal_editar_proveedor" className="modal">
       <div className="modal-box max-w-2xl rounded-none py-10">
@@ -109,6 +117,28 @@ export const ModalActualizarProveedor = ({ idObtenida }) => {
             props={{ ...register("provincia_proveedor", { required: true }) }}
             type={"text"}
           />
+          <div onClick={handleInputClick}>
+            {isEditable ? (
+              <FormInput
+                labelText={"Total"}
+                placeholder={"$12.355.00"}
+                props={{
+                  ...register("haber", { required: true }),
+                  onBlur: () => setIsEditable(false),
+                }}
+                type={"text"}
+              />
+            ) : (
+              <div className="flex flex-col gap-1 w-full">
+                <label className="font-semibold text-gray-700">
+                  Total del comprobante
+                </label>
+                <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-sm font-semibold">
+                  {formatearDinero(Number(haber) || 0)}
+                </p>
+              </div>
+            )}
+          </div>
           <div className="flex mt-3">
             <Button type={"submit"} titulo={"Actualizar el proveedor"} />
           </div>
