@@ -223,6 +223,9 @@ export const Proveedor = () => {
                   Proveedor
                 </th>{" "}
                 <th className="px-4 py-4  text-slate-800 font-bold uppercase">
+                  Tipo
+                </th>{" "}
+                <th className="px-4 py-4  text-slate-800 font-bold uppercase">
                   Total
                 </th>{" "}
                 <th className="px-1 py-4  text-slate-800 font-bold uppercase">
@@ -240,8 +243,11 @@ export const Proveedor = () => {
                   <td className="px-4 py-3 font-medium text-gray-900 uppercase">
                     {formatearFecha(s.fecha)}
                   </td>
-                  <td className="px-4 py-3 font-medium text-gray-900 uppercase">
+                  <td className="px-4 py-3 font-bold text-gray-900 uppercase">
                     {s.proveedor}
+                  </td>
+                  <td className="px-4 py-3 font-bold text-gray-900 uppercase">
+                    {s.tipo_pago}
                   </td>
                   <td className="px-4 py-3 text-blue-600 font-bold uppercase">
                     {formatearDinero(Number(s.total))}

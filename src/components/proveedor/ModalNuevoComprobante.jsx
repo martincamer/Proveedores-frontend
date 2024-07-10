@@ -9,14 +9,27 @@ import FileDrop from "../FileDrop"; // Componente para cargar archivos
 import { toast } from "react-toastify";
 import axios from "axios";
 import { formatearDinero } from "../../helpers/formatearDinero";
+import { FormSelect } from "../formularios/FormSelect";
+
+export const tiposDePagos = [
+  { id: 1, nombre: "efectivo" },
+  { id: 2, nombre: "tarjeta de Crédito" },
+  { id: 3, nombre: "tarjeta de Débito" },
+  { id: 4, nombre: "transferencia Bancaria" },
+  { id: 5, nombre: "payPal" },
+  { id: 6, nombre: "cheque" },
+  { id: 7, nombre: "criptomonedas" },
+];
 
 export const ModalNuevoComprobante = ({ id, proveedor, setProveedor }) => {
   const { register, handleSubmit, reset, watch } = useForm();
+
   const { setProveedores } = useProveedoresContext();
 
   const [socket, setSocket] = useState(null);
 
   const total = watch("total");
+  const tipo_pago = watch("tipo_pago");
 
   useEffect(() => {
     const newSocket = io(import.meta.env.VITE_URL, {
@@ -69,6 +82,7 @@ export const ModalNuevoComprobante = ({ id, proveedor, setProveedor }) => {
       // Creamos el objeto del producto con todos los datos y la URL de la imagen
       const proveedorData = {
         comprobante: {
+          tipo_pago: tipo_pago,
           total: total,
           proveedor: proveedor.proveedor,
           localidad: proveedor.localidad_proveedor,
@@ -185,6 +199,24 @@ export const ModalNuevoComprobante = ({ id, proveedor, setProveedor }) => {
                 </p>
               </div>
             )}
+          </div>
+
+          <div>
+            <FormSelect
+              props={{
+                ...register("tipo_pago", { required: true }),
+              }}
+              labelText={"Seleccionar el tipo de pago"}
+            >
+              <option className="font-bold text-blue-500">
+                Seleccionar tipo de pago
+              </option>
+              {tiposDePagos.map((t) => (
+                <option className="font-semibold" key={t.id} value={t.nombre}>
+                  {t.nombre}
+                </option>
+              ))}
+            </FormSelect>
           </div>
 
           <FileDrop

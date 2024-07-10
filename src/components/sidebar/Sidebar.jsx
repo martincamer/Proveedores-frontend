@@ -56,6 +56,15 @@ export const SideBar = () => {
           >
             Proveedores, crear nuevos, editar, etc.
           </Link>
+
+          <Link
+            to={"/ordenes"}
+            className={`${
+              location.pathname === "/ordenes" ? "bg-gray-100" : "bg-none"
+            } hover:text-blue-500 text-blue-500 text-sm transition-all py-3 px-3`}
+          >
+            Ordenes de compra, cargar, crear, etc.
+          </Link>
         </div>
       ) : (
         <div className="flex flex-col justify-center">

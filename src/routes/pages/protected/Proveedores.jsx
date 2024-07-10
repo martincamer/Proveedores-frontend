@@ -110,10 +110,7 @@ export const Proveedores = () => {
                 Proveedor
               </th>{" "}
               <th className="px-4 py-4  text-slate-800 font-bold uppercase">
-                Localidad
-              </th>{" "}
-              <th className="px-4 py-4  text-slate-800 font-bold uppercase">
-                Provincia
+                Localidad-Provincia
               </th>{" "}
               <th className="px-4 py-4  text-slate-800 font-bold uppercase">
                 Deuda
@@ -133,14 +130,11 @@ export const Proveedores = () => {
                 <td className="px-4 py-3 font-medium text-gray-900 uppercase">
                   {s.id}
                 </td>
-                <td className="px-4 py-3 font-medium text-gray-900 uppercase">
+                <td className="px-4 py-3 font-bold text-gray-900 uppercase">
                   {s.proveedor}
                 </td>{" "}
                 <td className="px-4 py-3 font-medium text-gray-900 uppercase">
-                  {s.localidad_proveedor}
-                </td>
-                <td className="px-4 py-3 font-medium text-gray-900 uppercase">
-                  {s.provincia_proveedor}
+                  {s.localidad_proveedor}, {s.provincia_proveedor}
                 </td>
                 <td className="px-4 py-3 font-bold text-gray-900 uppercase">
                   <div className="flex">
